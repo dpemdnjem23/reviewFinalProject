@@ -8,6 +8,10 @@ const {
   checkRefreshToken,
 } = require("../middlewares/token");
 
+
+module.exports= {
+
+
 signupControl: async (req, res) => {
   // 1. req.body 제대로 들어왔는지 확인 아니면 돌려보냄
   const {
@@ -75,4 +79,19 @@ signupControl: async (req, res) => {
     });
   }
 
-};
+},
+  signinControl: async (req, res) => {
+    //로그인 하기위해선 아이디 비밀번호 필요
+   //password는 암호화 되어 있으므로 알아내려면 salt 를 알아야한다.
+    const{ email,password} = req.body;
+
+    const salt = await User.findOne({email:email}).select({
+        _id:0,
+        salt:1
+    })
+
+
+
+
+  }
+}
