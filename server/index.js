@@ -2,8 +2,6 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const app = express();
-const fs = require("fs");
-const https = require("https");
 // const multer = require("multer");
 // const upload = multer({dest: "uploads/"});
 
@@ -36,16 +34,13 @@ app.get("/", (req, res) => {
 
 //routes
 
-app.use("/user", userRouter);
+// app.use("/user", userRouter);
 app.use("/auth", authRouter);
-app.use("/board", boardRouter);
-app.use("/comment", commentRouter);
-app.use("/mail", mailRouter);
-app.use("/map", mapRouter);
-app.use("/image", imageRouter);
-
-
-
+// app.use("/board", boardRouter);
+// app.use("/comment", commentRouter);
+// app.use("/mail", mailRouter);
+// app.use("/map", mapRouter);
+// app.use("/image", imageRouter);
 //server
 const HTTPS_PORT = 8080
 

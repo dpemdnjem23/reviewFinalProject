@@ -7,10 +7,9 @@ require("dotenv").config
     // * mongoDB connect *
     mongoose
       .connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-        useCreateIndex: true,
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true,
+        // useFindAndModify: false,
       })
       .then(() => console.log(`mongoDB connected`))
       .catch(err => console.error(`failed connection cause ${err}`));

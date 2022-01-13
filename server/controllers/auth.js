@@ -26,7 +26,7 @@ module.exports = {
     console.log("req.body", req.body);
 
     //유저가 없다면 회원가입
-    const userDB = User.findOne({ email: email });
+    const userDB = await User.findOne({ email: email });
     //유저가 있는경우
     if (userDB) {
       return res.status(400).send("가입된 회원");
@@ -59,12 +59,12 @@ module.exports = {
                 iscompany: iscompany,
                 isopen: true,
               };
-              User.create({ newUser })
+              User.create(newUser)
                 .then((data) => {
                   if (!data) {
                     return res.status(500).send("서버이상");
                   }
-
+                  console.log(data);
                   return res.status(201).send("회원가입 축하");
                 })
                 .catch((err) => {
@@ -82,35 +82,52 @@ module.exports = {
     const { email, password } = req.body;
 
     const salt = await User.findOne({ email: email }).select({
-        _id:1,
+      _id: 1,
       salt: 1,
     });
     if (salt === null) {
       return res.status(404).send("이메일 및 비밀번호 다시쳐봐");
     }
-//userDB에서 email을 찾는다.
-    crypto.pbkdf2(password, salt.salt,13000,64,'sha512',(err,key)=>{
-        if(err){
-            return res.status(400).send('암호화 에러')
-        }
-        const pass = key.toString('base')
-        Uesr.findOne({email:email,password:pass})
-        .then(data =>{
-            if(!data){
+    console.log(salt)
+    //userDB에서 email을 찾는다.
+    crypto.pbkdf2(password, salt.salt, 13000, 64, "sha512", (err, key) => {
+      if (err) {
+        return res.status(400).send("암호화 에러");
+      }
+      const pass = key.toString("base");
+      Uesr.findOne({ email: email, password: pass })
+        .then((data) => {
+          if (!data) {
+            return res.status(404).send("이메일 및 비밀번호 확인");
+          }
+          //회원가입
+          const { eamil, nickname } = data;
+          const user_id = data._id;
+          const accessToken = generateAccessToken({ email, nickname, user_id });
+          const refreshToken = generateRefreshToken({
+            email,
+            nickname,
+            user_id,
+          });
 
-                return res.status(404).send('이메일 및 비밀번호 확인')
-            }
-            //회원가입
-            const {eamil, nickname} = data
-            const user_id = data._id
-            const accessToken =generateAccessToken({email,nickname,user_id});
-            const refreshToken = generateRefreshToken({email,nickname,user_id})
-
-            return res.cookie('refreshToken',refreshToken).status(200).send({accessToken:accessToken})
-        }).catch(err =>{
-            return res.send(err)
+          return res
+            .cookie("refreshToken", refreshToken)
+            .status(200)
+            .send({ accessToken: accessToken });
         })
-        
+        .catch((err) => {
+          return res.send(err);
+        });
+    });
+  },
+  nickcheckControl: async (req, res) => {
+    //닉네임 체크 는 기존의 닉네임 db 매치후 확인한다.
+    const { nickname } = req.body;
+    User.findOne({ nickname: nickname }).then((data) => {
+      if (!data) {
+        return res.status(200).send("닉네임 사용 가능");
+      }
+      return res.status(400).send("이미 있는 닉네임");
     });
   },
 };
