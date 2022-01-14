@@ -5,7 +5,7 @@ module.exports = {
       return sign(data, process.env.ACCESS_SECRET, {expiresIn: "3h"});
     },
     generateRefreshToken: data =>{
-        return sign(data, process,env.REFRESH_SECRET,{expiresIn:'30d'})
+        return sign(data, process.env.REFRESH_SECRET,{expiresIn:'30d'})
     },
     isAuthorized:(req,res) =>{
        const authorization =  req.headers['Authorization'] || req.headers['authorization']

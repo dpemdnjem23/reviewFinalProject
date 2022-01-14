@@ -88,34 +88,37 @@ module.exports = {
     if (salt === null) {
       return res.status(404).send("이메일 및 비밀번호 다시쳐봐");
     }
-    console.log(salt)
+    console.log(salt.salt)
     //userDB에서 email을 찾는다.
     crypto.pbkdf2(password, salt.salt, 13000, 64, "sha512", (err, key) => {
-      if (err) {
-        return res.status(400).send("암호화 에러");
-      }
-      const pass = key.toString("base");
-      Uesr.findOne({ email: email, password: pass })
+   
+      const pass = key.toString("base64");
+
+      User.findOne({ email: email, password: pass })
         .then((data) => {
           if (!data) {
             return res.status(404).send("이메일 및 비밀번호 확인");
           }
+          console.log(data)
           //회원가입
-          const { eamil, nickname } = data;
+          const { email, nickname } = data;
+          console.log(email,nickname)
           const user_id = data._id;
+          console.log()
           const accessToken = generateAccessToken({ email, nickname, user_id });
           const refreshToken = generateRefreshToken({
             email,
             nickname,
             user_id,
           });
-
+console.log(accessToken)
           return res
-            .cookie("refreshToken", refreshToken)
+            // .cookie("refreshToken", refreshToken)
             .status(200)
-            .send({ accessToken: accessToken });
+            .send( {accessToken:accessToken,message:'sdfsdfasfsd'} );
         })
         .catch((err) => {
+          console.log(err)
           return res.send(err);
         });
     });

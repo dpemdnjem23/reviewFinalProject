@@ -1,0 +1,7 @@
+#server는 image는 우분투 20.04를 사용한다. 
+FROM ubuntu:20.04 
+#새로운 레이어에서 명령어를 실행, 새로운 이미지를 생성한다.
+#Run명령어를 실행할 때 마다 레이어가 생성, 캐시된다. 따라서 RUN 명령어를 따로 실행하면
+##pt-get-update는 다시 실행되지 않아서 최신패키지 설치x
+#명령 하나에 apt-get-update와 install을 함께 실행
+RUN 
