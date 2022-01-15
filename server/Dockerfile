@@ -1,7 +1,11 @@
-#server는 image는 우분투 20.04를 사용한다. 
-FROM ubuntu:20.04 
+#server image는 노드 16.04 
+FROM node:16.14.0 
 #새로운 레이어에서 명령어를 실행, 새로운 이미지를 생성한다.
 #Run명령어를 실행할 때 마다 레이어가 생성, 캐시된다. 따라서 RUN 명령어를 따로 실행하면
 ##pt-get-update는 다시 실행되지 않아서 최신패키지 설치x
 #명령 하나에 apt-get-update와 install을 함께 실행
-RUN 
+
+#Dockerfile의 빌드로 생선된 이미지에서 열어 컨테이너 생성 시 -p 옵션의 컨테이너 포트 값으로 EXPOSE 값을 적어야 한다.
+EXPOSE 8000
+
+#CMD는 docker run 실행 시, 추가적인 명령어에 따라 설정한 명령어를 수정하고자 할때
