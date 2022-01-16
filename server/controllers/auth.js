@@ -111,7 +111,6 @@ module.exports = {
             nickname,
             user_id,
           });
-console.log(accessToken)
           return res
             // .cookie("refreshToken", refreshToken)
             .status(200)
