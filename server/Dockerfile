@@ -6,6 +6,9 @@ FROM node:16.14.0
 #명령 하나에 apt-get-update와 install을 함께 실행
 
 #Dockerfile의 빌드로 생선된 이미지에서 열어 컨테이너 생성 시 -p 옵션의 컨테이너 포트 값으로 EXPOSE 값을 적어야 한다.
-EXPOSE 8000
+EXPOSE 8000 
+
+
+
 
 #CMD는 docker run 실행 시, 추가적인 명령어에 따라 설정한 명령어를 수정하고자 할때
