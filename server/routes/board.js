@@ -1,8 +1,8 @@
-// const router = require("express").Router();
-// const controller = require("../controllers/board");
-// const upload = require("../middlewares/multer");
+const router = require("express").Router();
+const controller = require("../controllers/board");
+const upload = require("../middlewares/multer");
 
-// router.post("/fbregister", upload.array("image"), controller.fbregisterControl);
+router.post("/fbregister", upload.array("image"), controller.fbregisterControl);
 // router.post(
 //   "/fbimageEdit",
 //   upload.array("image"),
