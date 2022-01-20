@@ -11,7 +11,10 @@ user_id:{
 title:String,
 description:String.toString,
 images:Array,
-
+isopen: {
+    type: Boolean,
+    default: true,
+  },
 
 
 

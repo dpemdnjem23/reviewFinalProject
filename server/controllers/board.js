@@ -1,15 +1,18 @@
 require("dotenv").config();
 const Freeboard = require("../models/Freeboard");
 const Crewboard = require("../models/Crewboard");
-const Mongoose = require("mongoose");
-const ObjectId = Mongoose.Types.ObjectId;
+
+
 const {isAuthorized} = require("../middlewares/token");
 
 module.exports = {
 //freboard
 fbregisterControl: async(req,res) =>{
-const image = req.files;
-const path = image.map(img => img.location);
+
+    const {title,description,user_id} =req.body
+
+  const image = req.files;
+  const path = image.map(img => img.location);
 
 //1.가입된 유저인지확인
 //2. 유저가 아니면 작성 x
@@ -24,11 +27,51 @@ if(!userData){
 if(image===undefined){
     return res.status(400).send('이미지')
 }
+Freeboard.create({user_id:user_id,title:title,description:description,images:path}).then(data =>{
+if(!data){
+    return res.status(500).send(data)
+}
+return res.status(200).send(data)
 
-// const createImages = await Freeboard.create({image:path}) 
+}).catch(err =>{
+    console.log(err)
+})
 
+
+},
+fbinfoControl: async(req,res) =>{
+
+const userData = isAuthorized(req,res)
+if(!userData){
+    return res.status(401).send('회원가입 필요')
+}
 
 
 }
+
+
+
+// fbimageEditControl: async (req,res) =>{
+// //없앨수도 있음
+//     const image = req.files;
+//     const path = image.map(img => img.location);
+
+//     const userData = isAuthorized(req,res)
+
+//     if(!userData){
+//         return res.status(401).send('회원가입 필요')
+//     }
+
+//     Freeboard.updateOne({images:path}).then(data =>{
+//         if(!data){
+
+//         }
+//         return res.status(400).send(data)
+//     })
+   
+    
+
+// }
+
 
 };
