@@ -28,7 +28,7 @@ app.use(
 );
 app.use(cookieParser());
 DB();
-app.get("/", (req, res) => {
+app.get("/", (req:any, res:any) => {
   res.status(200).send("hello world....!!");
 });
 
