@@ -1,6 +1,7 @@
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const express = require("express");
+
+import express from 'express';
 const app = express();
 // const multer = require("multer");
 // const upload = multer({dest: "uploads/"});
@@ -15,6 +16,8 @@ const mapRouter = require("./routes/map");
 const imageRouter = require("./routes/image");
 require("dotenv").config();
 //use modules
+
+
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static("public"));
@@ -28,8 +31,8 @@ app.use(
 );
 app.use(cookieParser());
 DB();
-app.get("/", (req:any, res:any) => {
-  res.status(200).send("hello world....!!");
+app.get("/", (req: express.Request , res: express.Response) => {
+ return res.status(200).send("hello world....!!");
 });
 
 //routes
@@ -42,7 +45,7 @@ app.use("/auth", authRouter);
 // app.use("/map", mapRouter);
 // app.use("/image", imageRouter);
 //server
-const HTTPS_PORT = 8080
+const HTTPS_PORT:number = 8080
 
 //인증서 없는경우
 

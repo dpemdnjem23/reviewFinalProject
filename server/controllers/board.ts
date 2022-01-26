@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const Freeboard = require("../models/Freeboard");
 const Crewboard = require("../models/Crewboard");
@@ -7,12 +8,12 @@ const {isAuthorized} = require("../middlewares/token");
 
 module.exports = {
 //freboard
-fbregisterControl: async(req,res) =>{
+fbregisterControl: async(req:Express.Response,res:Express.Request) =>{
 
     const {title,description,user_id} =req.body
 
   const image = req.files;
-  const path = image.map(img => img.location);
+  const path = image.map((img:string) => img.location);
 
 //1.가입된 유저인지확인
 //2. 유저가 아니면 작성 x
@@ -33,7 +34,7 @@ if(!data){
 }
 return res.status(200).send(data)
 
-}).catch(err =>{
+}).catch((err:Error) =>{
     console.log(err)
 })
 

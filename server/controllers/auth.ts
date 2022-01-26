@@ -1,3 +1,6 @@
+
+import { AnyLengthString } from 'aws-sdk/clients/comprehendmedical';
+import express from 'express'
 require("dotenv").config();
 const crypto = require("crypto");
 const User = require("../models/User");
@@ -9,7 +12,7 @@ const {
 } = require("../middlewares/token");
 
 module.exports = {
-  signupControl: async (req, res) => {
+  signupControl: async (req:express.Request, res:express.Response) => {
     // 1. req.body 제대로 들어왔는지 확인 아니면 돌려보냄
     const {
       email,
@@ -22,8 +25,7 @@ module.exports = {
       company,
       iscompany,
     } = req.body;
-
-    console.log("req.body", req.body);
+   
 
     //유저가 없다면 회원가입
     const userDB = await User.findOne({ email: email });
@@ -33,13 +35,13 @@ module.exports = {
     }
 
     if (!userDB) {
-      crypto.randomBytes(64, (err, buf) => {
+      crypto.randomBytes(64, (err:Error, buf:any) => {
         if (err) {
           console.log(err);
           return;
         } else {
           const salt = buf.toString("base64");
-          crypto.pbkdf2(password, salt, 13000, 64, "sha512", (err, key) => {
+          crypto.pbkdf2(password, salt, 13000, 64, "sha512", (err:Error, key:any) => {
             if (err) {
               console.log(err);
               return;
@@ -60,14 +62,15 @@ module.exports = {
                 isopen: true,
               };
               User.create(newUser)
-                .then((data) => {
+                .then((data:object) => {
+                 
                   if (!data) {
                     return res.status(500).send("서버이상");
                   }
                   console.log(data);
                   return res.status(201).send("회원가입 축하");
                 })
-                .catch((err) => {
+                .catch((err:Error) => {
                   return res.send(err);
                 });
             }
@@ -76,7 +79,7 @@ module.exports = {
       });
     }
   },
-  signinControl: async (req, res) => {
+  signinControl: async (req: express.Request, res: express.Response) => {
     //로그인 하기위해선 아이디 비밀번호 필요
     //password는 암호화 되어 있으므로 알아내려면 salt 를 알아야한다.
     const { email, password } = req.body;
@@ -90,12 +93,12 @@ module.exports = {
     }
     console.log(salt.salt)
     //userDB에서 email을 찾는다.
-    crypto.pbkdf2(password, salt.salt, 13000, 64, "sha512", (err, key) => {
+    crypto.pbkdf2(password, salt.salt, 13000, 64, "sha512", (err:Error, key:any) => {
    
       const pass = key.toString("base64");
 
       User.findOne({ email: email, password: pass })
-        .then((data) => {
+        .then((data:any ) => {
           if (!data) {
             return res.status(404).send("이메일 및 비밀번호 확인");
           }
@@ -116,16 +119,16 @@ module.exports = {
             .status(200)
             .send( {accessToken:accessToken,message:'sdfsdfasfsd'} );
         })
-        .catch((err) => {
+        .catch((err:Error) => {
           console.log(err)
           return res.send(err);
         });
     });
   },
-  nickcheckControl: async (req, res) => {
+  nickcheckControl: async (req:express.Request, res:express.Response) => {
     //닉네임 체크 는 기존의 닉네임 db 매치후 확인한다.
     const { nickname } = req.body;
-    User.findOne({ nickname: nickname }).then((data) => {
+    User.findOne({ nickname: nickname }).then((data:object) => {
       if (!data) {
         return res.status(200).send("닉네임 사용 가능");
       }

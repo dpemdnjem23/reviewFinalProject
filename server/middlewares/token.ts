@@ -1,13 +1,13 @@
 require("dotenv").config();
 const {sign, verify} = require("jsonwebtoken");
 module.exports = {
-    generateAccessToken: data => {
+    generateAccessToken: (data) => {
       return sign(data, process.env.ACCESS_SECRET, {expiresIn: "3h"});
     },
-    generateRefreshToken: data =>{
+    generateRefreshToken: (data) =>{
         return sign(data, process.env.REFRESH_SECRET,{expiresIn:'30d'})
     },
-    isAuthorized:(req,res) =>{
+    isAuthorized:(req:,res) =>{
        const authorization =  req.headers['Authorization'] || req.headers['authorization']
         //인증에실패하는경우
         if(!authorization){

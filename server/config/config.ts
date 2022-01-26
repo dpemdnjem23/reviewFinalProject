@@ -1,6 +1,7 @@
 require("dotenv").config
 
-  const mongoose = require("mongoose");
+const mongoose = require("mongoose");
+const { isExpressionStatement } = require("typescript");
   
   module.exports = () => {
     const uri = `${process.env.MONGODB_URI}`;
@@ -12,5 +13,5 @@ require("dotenv").config
         // useFindAndModify: false,
       })
       .then(() => console.log(`mongoDB connected`))
-      .catch(err => console.error(`failed connection cause ${err}`));
+      .catch((err: Error)  => console.error(`failed connection cause ${err}`));
   };
