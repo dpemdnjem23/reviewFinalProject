@@ -1,4 +1,5 @@
 
+import express from 'express'
 require("dotenv").config();
 const Freeboard = require("../models/Freeboard");
 const Crewboard = require("../models/Crewboard");
@@ -8,19 +9,19 @@ const {isAuthorized} = require("../middlewares/token");
 
 module.exports = {
 //freboard
-fbregisterControl: async(req:Express.Response,res:Express.Request) =>{
+fbregisterControl: async(req: express.Response,res: express.Request) =>{
 
     const {title,description,user_id} =req.body
 
-  const image = req.files;
-  const path = image.map((img:string) => img.location);
+  const image= req.files;
+  const path = image.map((img: any) => img.location);
 
 //1.가입된 유저인지확인
 //2. 유저가 아니면 작성 x
 //3.유저 라면 board 생성 할수 있ek.
 //4. img 올리는경우 안올리는경우 존재?
 
-const userData = isAuthorized(req,res)
+const userData:(number|string) = isAuthorized(req,res)
 
 if(!userData){
     return res.stauts(401).send('회원가입 필요')

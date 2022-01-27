@@ -1,4 +1,5 @@
 
+import { String } from 'aws-sdk/clients/apigateway';
 import { AnyLengthString } from 'aws-sdk/clients/comprehendmedical';
 import express from 'express'
 require("dotenv").config();
@@ -82,7 +83,7 @@ module.exports = {
   signinControl: async (req: express.Request, res: express.Response) => {
     //로그인 하기위해선 아이디 비밀번호 필요
     //password는 암호화 되어 있으므로 알아내려면 salt 를 알아야한다.
-    const { email, password } = req.body;
+    const { email, password }= req.body;
 
     const salt = await User.findOne({ email: email }).select({
       _id: 1,
