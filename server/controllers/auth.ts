@@ -1,6 +1,4 @@
 
-import { String } from 'aws-sdk/clients/apigateway';
-import { AnyLengthString } from 'aws-sdk/clients/comprehendmedical';
 import express from 'express'
 require("dotenv").config();
 const crypto = require("crypto");
