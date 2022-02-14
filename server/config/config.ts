@@ -1,10 +1,9 @@
 require("dotenv").config
-
+export{}
 const mongoose = require("mongoose");
-const { isExpressionStatement } = require("typescript");
-  
+
   module.exports = () => {
-    const uri = `${process.env.MONGODB_URI}`;
+    const uri :string  = `${process.env.MONGODB_URI}`;
     // * mongoDB connect *
     mongoose
       .connect(uri, {
