@@ -25,7 +25,7 @@ module.exports = {
         //4. img 올리는경우 안올리는경우 존재?
         const userData = isAuthorized(req);
         if (!userData) {
-            return res.stauts(401).send('회원가입 필요');
+            return res.status(401).send('인증 필요');
         }
         if (image === undefined) {
             return res.status(400).send('이미지');

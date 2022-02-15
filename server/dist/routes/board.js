@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const router = require("express").Router();
 const controller = require("../controllers/board");
 const upload = require("../middlewares/multer");

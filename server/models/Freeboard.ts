@@ -1,4 +1,4 @@
-export{}
+export {}
 
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
@@ -11,7 +11,7 @@ user_id:{
     ref:'User',
 },
 title:String,
-description:String.toString,
+description:String,
 images:Array,
 isopen: {
     type: Boolean,

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const freecommentSchema = require("./Freecomment");
@@ -9,7 +10,7 @@ const freeboardSchema = new Schema({
         ref: 'User',
     },
     title: String,
-    description: String.toString,
+    description: String,
     images: Array,
     isopen: {
         type: Boolean,

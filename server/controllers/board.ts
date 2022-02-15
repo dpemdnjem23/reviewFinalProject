@@ -1,5 +1,6 @@
 export{}
-import express from 'express'
+import { String } from 'aws-sdk/clients/cloudsearch';
+import express from 'express' 
 import { BoardFree, image } from '../inteface';
 require("dotenv").config();
 const Freeboard = require("../models/Freeboard");
@@ -14,24 +15,26 @@ fbregisterControl: async (req:express.Request,res:express.Response) =>{
  
     const {title,description,user_id}:BoardFree =req.body
 
-  const image = req.files;
-  const path : = image.map((img:any) => img.location);
+  const image:any = req.files;
+
+  const path:any = image.map((img:any) => img.location);
 
 //1.가입된 유저인지확인
 //2. 유저가 아니면 작성 x
 //3.유저 라면 board 생성 할수 있ek.
 //4. img 올리는경우 안올리는경우 존재?
-
-const userData:any = isAuthorized(req)
-
+const userData: string = isAuthorized(req) 
 if(!userData){
-    return res.stauts(401).send('회원가입 필요')
+    return res.status(401).send('인증 필요')
 }
+
+
+
 if(image===undefined){
     return res.status(400).send('이미지')
 }
 
-Freeboard.create({user_id:user_id,title:title,description:description,images:path}).then((data:string) =>{
+Freeboard.create({user_id:user_id,title:title,description:description,images:path}).then((data:any) =>{
 if(!data){
     return res.status(500).send(data)
 }

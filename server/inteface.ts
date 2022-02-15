@@ -16,5 +16,5 @@ export interface userUniqueSearchInput {
     email : string;
 }
 export interface image {
-    files : string;
+    files ? : string;
 }
