@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
-const userSchema = new Schema(
+var userSchema = new Schema(
   {
     email: {
       type: String,
