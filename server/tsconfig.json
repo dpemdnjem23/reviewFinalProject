@@ -3,10 +3,11 @@
     // "typeRoots": [
     //   "./","./node_modules/@types"
     // ],
-    "lib": ["es2015"],
+
     "target": "es6", //어떤 버전으로 컴파일할지 작성
     "module": "commonjs", //어떤 모듈 방식으로 컴파일할지 설정
     "outDir": "./dist", //컴파일후 js파일들이 생성되는곳
+     "rootDir":".",
     "esModuleInterop": true, //require와 import호환
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true, //암시적 any타입을 회피한다.
@@ -15,5 +16,5 @@
     "sourceMap": false
   },
   "include": ["./**/*"] /* 사용할 폴더 및 파일 */,
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules, ./dist/**/*"]
 }

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const freecommentSchema = require("./Freecomment");
-const freeboardSchema = new Schema({
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
+var freecommentSchema = require("./Freecomment");
+var freeboardSchema = new Schema({
     like: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     user_id: {
         type: Schema.Types.ObjectId,
