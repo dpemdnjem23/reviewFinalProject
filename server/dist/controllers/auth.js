@@ -17,6 +17,7 @@ module.exports = {
     signupControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // 1. req.body 제대로 들어왔는지 확인 아니면 돌려보냄
         const { email, nickname, password, sex, want_region, want_vol, age, company, iscompany, } = req.body;
+        console.log(email, nickname, password);
         //유저가 없다면 회원가입
         const userDB = yield User.findOne({ email: email });
         //유저가 있는경우
@@ -25,6 +26,7 @@ module.exports = {
         }
         if (!userDB) {
             crypto.randomBytes(64, (err, buf) => {
+                console.log(buf);
                 if (err) {
                     console.log(err);
                     return;
@@ -38,6 +40,7 @@ module.exports = {
                         }
                         else {
                             const pass = key.toString("base64");
+                            console.log(pass);
                             const newUser = {
                                 email: email,
                                 password: pass,
@@ -103,7 +106,7 @@ module.exports = {
                 return res
                     // .cookie("refreshToken", refreshToken)
                     .status(200)
-                    .send({ accessToken: accessToken, message: 'sdfsdfasfsd' });
+                    .send({ accessToken: accessToken, message: '로그인 완료 되었습니다.' });
             })
                 .catch((err) => {
                 console.log(err);

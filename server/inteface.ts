@@ -18,3 +18,12 @@ export interface userUniqueSearchInput {
 export interface image {
     files ? : string;
 }
+
+export interface Userdata {
+
+    email?:String,
+    nickname?:String,
+    user_id?:String,
+    iat?:number,
+    exp?:number
+}

@@ -31,4 +31,4 @@ router.post("/fbregister", upload.array("image"), controller.fbregisterControl);
 // router.post("/crewlike", controller.crewlikeControl);
 // router.post("/crewdislike", controller.crewdislikeControl);
 
-// module.exports = router;
+module.exports = router;

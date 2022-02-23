@@ -7,6 +7,7 @@ const app = express();
 // const upload = multer({dest: "uploads/"});
 
 const DB = require("./config/config");
+
 const boardRouter = require("./routes/board");
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
@@ -39,7 +40,7 @@ app.get("/", (req: express.Request , res: express.Response) => {
 
 // app.use("/user", userRouter);
 app.use("/auth", authRouter);
-// app.use("/board", boardRouter);
+app.use("/board", boardRouter);
 // app.use("/comment", commentRouter);
 // app.use("/mail", mailRouter);
 // app.use("/map", mapRouter);

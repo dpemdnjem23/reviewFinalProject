@@ -24,7 +24,9 @@ module.exports = {
       company,
       iscompany,
     } = req.body;
-   
+   console.log(email,
+    nickname,
+    password)
 
     //유저가 없다면 회원가입
     const userDB = await User.findOne({ email: email });
@@ -35,6 +37,7 @@ module.exports = {
 
     if (!userDB) {
       crypto.randomBytes(64, (err:Error, buf:any) => {
+        console.log(buf)
         if (err) {
           console.log(err);
           return;
@@ -46,6 +49,7 @@ module.exports = {
               return;
             } else {
               const pass = key.toString("base64");
+              console.log(pass)
 
               const newUser = {
                 email: email,
@@ -116,7 +120,7 @@ module.exports = {
           return res
             // .cookie("refreshToken", refreshToken)
             .status(200)
-            .send( {accessToken:accessToken,message:'sdfsdfasfsd'} );
+            .send( {accessToken:accessToken,message:'로그인 완료 되었습니다.'} );
         })
         .catch((err:Error) => {
           console.log(err)

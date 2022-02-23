@@ -1,7 +1,7 @@
 export{}
-import { String } from 'aws-sdk/clients/cloudsearch';
+
 import express from 'express' 
-import { BoardFree, image } from '../inteface';
+import { BoardFree,Userdata } from '../inteface';
 require("dotenv").config();
 const Freeboard = require("../models/Freeboard");
 const Crewboard = require("../models/Crewboard");
@@ -13,36 +13,32 @@ module.exports = {
 //freboard
 fbregisterControl: async (req:express.Request,res:express.Response) =>{
  
-    const {title,description,user_id}:BoardFree =req.body
+    const {title,description}:BoardFree =req.body
 
-  const image:any = req.files;
-
-  const path:any = image.map((img:any) => img.location);
 
 //1.가입된 유저인지확인
 //2. 유저가 아니면 작성 x
 //3.유저 라면 board 생성 할수 있ek.
-//4. img 올리는경우 안올리는경우 존재?
-const userData: string = isAuthorized(req) 
+//4. img 올리는경우 안올리는경우 존재? 포스트맨에선 이미지를 함께 사용x
+
+try{
+const userData:Userdata = isAuthorized(req) 
 if(!userData){
     return res.status(401).send('인증 필요')
 }
+console.log(userData.user_id,'sadfsfads')
 
-
-
-if(image===undefined){
-    return res.status(400).send('이미지')
+const freeboardPost = await Freeboard.create({user_id:userData.user_id,title:title,description:description})
+    
+console.log(freeboardPost,'sadfs')
+if(!freeboardPost){
+    return res.status(400).send("잘못된 등록입니다.")
 }
+return res.status(200).send(Freeboard)
 
-Freeboard.create({user_id:user_id,title:title,description:description,images:path}).then((data:any) =>{
-if(!data){
-    return res.status(500).send(data)
+}catch(err:any){
+    return res.status(500).send(err)
 }
-return res.status(200).send(data)
-
-}).catch((err:Error) =>{
-    return res.send(err)
-})
 
 
 },
@@ -59,6 +55,8 @@ if(!userData){
 
 
 // fbimageEditControl: async (req,res) =>{
+
+
 // //없앨수도 있음
 //     const image = req.files;
 //     const path = image.map(img => img.location);

@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 //routes
 // app.use("/user", userRouter);
 app.use("/auth", authRouter);
-// app.use("/board", boardRouter);
+app.use("/board", boardRouter);
 // app.use("/comment", commentRouter);
 // app.use("/mail", mailRouter);
 // app.use("/map", mapRouter);

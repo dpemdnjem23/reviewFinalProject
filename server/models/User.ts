@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+export {}
+var mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema(

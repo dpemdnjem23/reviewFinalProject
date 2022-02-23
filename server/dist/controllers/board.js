@@ -16,28 +16,27 @@ const { isAuthorized } = require("../middlewares/token");
 module.exports = {
     //freboard
     fbregisterControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { title, description, user_id } = req.body;
-        const image = req.files;
-        const path = image.map((img) => img.location);
+        const { title, description } = req.body;
         //1.가입된 유저인지확인
         //2. 유저가 아니면 작성 x
         //3.유저 라면 board 생성 할수 있ek.
-        //4. img 올리는경우 안올리는경우 존재?
-        const userData = isAuthorized(req);
-        if (!userData) {
-            return res.status(401).send('인증 필요');
-        }
-        if (image === undefined) {
-            return res.status(400).send('이미지');
-        }
-        Freeboard.create({ user_id: user_id, title: title, description: description, images: path }).then((data) => {
-            if (!data) {
-                return res.status(500).send(data);
+        //4. img 올리는경우 안올리는경우 존재? 포스트맨에선 이미지를 함께 사용x
+        try {
+            const userData = isAuthorized(req);
+            if (!userData) {
+                return res.status(401).send('인증 필요');
             }
-            return res.status(200).send(data);
-        }).catch((err) => {
-            return res.send(err);
-        });
+            console.log(userData, 'sadfsfads');
+            const freeboardPost = yield Freeboard.create({ title: title, description: description });
+            console.log(freeboardPost, 'sadfs');
+            if (!freeboardPost) {
+                return res.status(400).send("잘못된 등록입니다.");
+            }
+            return res.status(200).send(Freeboard);
+        }
+        catch (err) {
+            return res.status(500).send(err);
+        }
     }),
     fbinfoControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const userData = isAuthorized(req, res);

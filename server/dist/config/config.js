@@ -7,9 +7,9 @@ module.exports = () => {
     // * mongoDB connect *
     mongoose
         .connect(uri, {
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true,
-    // useFindAndModify: false,
+        useNewUrlParser: true,
+        // useUnifiedTopology: true,
+        // useFindAndModify: false,
     })
         .then(() => console.log(`mongoDB connected`))
         .catch((err) => console.error(`failed connection cause ${err}`));

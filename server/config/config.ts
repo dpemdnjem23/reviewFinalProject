@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
     // * mongoDB connect *
     mongoose
       .connect(uri, {
-        // useNewUrlParser: true,
+        useNewUrlParser: true,
         // useUnifiedTopology: true,
         // useFindAndModify: false,
       })
