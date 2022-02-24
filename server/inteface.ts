@@ -15,7 +15,7 @@ export interface IUserInputDTO {
 export interface userUniqueSearchInput {
     email : string;
 }
-export interface image {
+export interface Image {
     files ? : string;
 }
 
