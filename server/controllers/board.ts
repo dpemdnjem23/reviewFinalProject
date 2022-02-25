@@ -1,6 +1,7 @@
 export{}
 
-import { Images } from 'aws-sdk/clients/sagemaker';
+import { String } from 'aws-sdk/clients/batch';
+
 import express from 'express' 
 import { BoardFree,Userdata } from '../inteface';
 require("dotenv").config();
@@ -12,75 +13,75 @@ const {isAuthorized} = require("../middlewares/token");
 
 module.exports = {
 //freboard
-fbregisterControl: async (req:express.Request,res:express.Response) =>{
+fbimageControl: async (req:express.Request,res:express.Response) =>{
  
-    const {title,description}:BoardFree =req.body
 try{
-    const image: any = req.files;
-    const path = image.map((img:any) => img.location);
+    const image: any= req.files;
+    const path: [string] = image.map((img:{location:String}) => img.location);
 
     console.log(image,path)
+
 //1.가입된 유저인지확인
 //2. 유저가 아니면 작성 x
 //3.유저 라면 board 생성 할수 있ek.
 //4. img 올리는경우 안올리는경우 존재? 포스트맨에선 이미지를 함께 사용x
-
-
 const userData:Userdata = isAuthorized(req) 
+
 if(!userData){
     return res.status(401).send('인증 필요')
 }
-console.log(userData.user_id,'sadfsfads')
 
-const freeboardPost = await Freeboard.create({user_id:userData.user_id,title:title,description:description,image:path})
+
+const freeboardPost = await Freeboard.create({user_id:userData.user_id,images:path})
     
-console.log(freeboardPost,'sadfs')
+
 if(!freeboardPost){
     return res.status(400).send("잘못된 등록입니다.")
 }
-return res.status(200).send(Freeboard)
+console.log(freeboardPost)
+return res.status(200).send(freeboardPost)
 
 }catch(err){
-    return res.status(500).send(err)
-}
-
-
-},
-fbinfoControl: async(req:express.Request,res:express.Response) =>{
-
-const userData = isAuthorized(req,res)
-if(!userData){
-    return res.status(401).send('회원가입 필요')
+    console.log(err)
+    return res.status(500).send('서버 오류')
 }
 
 
 },
 
+//이미지 수정하기
+fbimageEditControl: async (req:express.Request,res:express.Response) =>{
 
+try{
+    const image: any= req.files;
+    const path: string[] = image.map((img:{location:String}) => img.location);
 
-// fbimageEditControl: async (req,res) =>{
+    const {freeboard_id} = req.body;
+    const userData = isAuthorized(req,res)
 
+    if(!userData){
+        return res.status(401).send('회원가입 필요')
+    }
+    //수정하고자하는 board, 수정하는 유저를 찾는다.
+    const findBoard = await Freeboard.findOne({_id:freeboard_id,user_id:userData.user_id})
 
-// //없앨수도 있음
-//     const image = req.files;
-//     const path = image.map(img => img.location);
+if(!findBoard){
+return res.status(400).send('변경할수 없는 게시물 입니다.')
+}
+    const imageUpdate = Freeboard.updateOne({_id:findBoard._id},{images:path})
+        if(!imageUpdate){
+            return res.status(400).send("업데이트 실패")
+        } 
+        console.log(imageUpdate,'updataea')
+       return res. status(200).send('업데이트 성공')
 
-//     const userData = isAuthorized(req,res)
-
-//     if(!userData){
-//         return res.status(401).send('회원가입 필요')
-//     }
-
-//     Freeboard.updateOne({images:path}).then(data =>{
-//         if(!data){
-
-//         }
-//         return res.status(400).send(data)
-//     })
+      }catch(err){
+        return res.status(500).send(err)
+    }
    
     
 
-// }
+},
 
 
 };

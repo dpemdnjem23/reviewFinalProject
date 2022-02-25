@@ -41,7 +41,7 @@ app.use("/board", boardRouter);
 // app.use("/map", mapRouter);
 // app.use("/image", imageRouter);
 //server
-const HTTPS_PORT = 8080;
+const HTTPS_PORT = 8000;
 //인증서 없는경우
 app.listen(HTTPS_PORT, () => {
     console.log(`      🚀 Server is starting on http ${HTTPS_PORT}`);

@@ -15,8 +15,7 @@ const Crewboard = require("../models/Crewboard");
 const { isAuthorized } = require("../middlewares/token");
 module.exports = {
     //freboard
-    fbregisterControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { title, description } = req.body;
+    fbimageControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const image = req.files;
             const path = image.map((img) => img.location);
@@ -29,36 +28,41 @@ module.exports = {
             if (!userData) {
                 return res.status(401).send('인증 필요');
             }
-            console.log(userData.user_id, 'sadfsfads');
-            const freeboardPost = yield Freeboard.create({ user_id: userData.user_id, title: title, description: description, image: path });
-            console.log(freeboardPost, 'sadfs');
+            const freeboardPost = yield Freeboard.create({ user_id: userData.user_id, images: path });
             if (!freeboardPost) {
                 return res.status(400).send("잘못된 등록입니다.");
             }
-            return res.status(200).send(Freeboard);
+            console.log(freeboardPost);
+            return res.status(200).send(freeboardPost);
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(500).send('서버 오류');
+        }
+    }),
+    // fbinfoControl: async(req:express.Request,res:express.Response) =>{
+    // const userData = isAuthorized(req,res)
+    // if(!userData){
+    //     return res.status(401).send('회원가입 필요')
+    // }
+    // },
+    fbimageEditControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const image = req.files;
+            const path = image.map((img) => img.location);
+            const userData = isAuthorized(req, res);
+            if (!userData) {
+                return res.status(401).send('회원가입 필요');
+            }
+            const imageUpdate = Freeboard.update({ images: path });
+            if (!imageUpdate) {
+                return res.status(400).send("업데이트 실패");
+            }
+            console.log(imageUpdate, 'updataea');
+            return res.status(200).send('업데이트 성공');
         }
         catch (err) {
             return res.status(500).send(err);
         }
     }),
-    fbinfoControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const userData = isAuthorized(req, res);
-        if (!userData) {
-            return res.status(401).send('회원가입 필요');
-        }
-    }),
-    // fbimageEditControl: async (req,res) =>{
-    // //없앨수도 있음
-    //     const image = req.files;
-    //     const path = image.map(img => img.location);
-    //     const userData = isAuthorized(req,res)
-    //     if(!userData){
-    //         return res.status(401).send('회원가입 필요')
-    //     }
-    //     Freeboard.updateOne({images:path}).then(data =>{
-    //         if(!data){
-    //         }
-    //         return res.status(400).send(data)
-    //     })
-    // }
 };

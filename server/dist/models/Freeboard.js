@@ -15,7 +15,9 @@ var freeboardSchema = new Schema({
     },
     title: String,
     description: String,
-    images: Array,
+    images: {
+        type: Array,
+    },
     isopen: {
         type: Boolean,
         default: true,

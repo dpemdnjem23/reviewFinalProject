@@ -1,15 +1,15 @@
-export{}
+export {};
 
 const router = require("express").Router();
 const controller = require("../controllers/board");
 const upload = require("../middlewares/multer");
 
-router.post("/fbregister", upload.array("images"), controller.fbregisterControl);
-// router.post(
-//   "/fbimageEdit",
-//   upload.array("image"),
-//   controller.fbimageEditControl,
-// );
+router.post("/fbimage", upload.array("images"), controller.fbimageControl);
+router.post(
+  "/fbimageEdit",
+  upload.array("images"),
+  controller.fbimageEditControl
+);
 // router.get("/fblist", controller.fblistControl);
 // router.post("/fbinfo", controller.fbinfoControl);
 // router.patch("/fbedit", controller.fbeditControl);

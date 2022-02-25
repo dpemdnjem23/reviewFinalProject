@@ -46,7 +46,7 @@ app.use("/board", boardRouter);
 // app.use("/map", mapRouter);
 // app.use("/image", imageRouter);
 //server
-const HTTPS_PORT:number = 8080
+const HTTPS_PORT:number = 8000
 
 //인증서 없는경우
 

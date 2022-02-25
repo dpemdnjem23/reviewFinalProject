@@ -6,6 +6,7 @@ const multerS3 = require("multer-s3");
 const aws = require("aws-sdk");
 require("dotenv").config();
 const s3 = new aws.S3({
+    signatureVersion: 'v4',
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_KEY_ID,
     region: "ap-northeast-2",
