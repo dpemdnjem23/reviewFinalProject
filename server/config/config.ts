@@ -8,8 +8,8 @@ const mongoose = require("mongoose");
     mongoose
       .connect(uri, {
         useNewUrlParser: true,
-        // useUnifiedTopology: true,
-        // useFindAndModify: false,
+        useUnifiedTopology: true,
+       
       })
       .then(() => console.log(`mongoDB connected`))
       .catch((err: Error)  => console.error(`failed connection cause ${err}`));

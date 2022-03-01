@@ -8,8 +8,7 @@ module.exports = () => {
     mongoose
         .connect(uri, {
         useNewUrlParser: true,
-        // useUnifiedTopology: true,
-        // useFindAndModify: false,
+        useUnifiedTopology: true,
     })
         .then(() => console.log(`mongoDB connected`))
         .catch((err) => console.error(`failed connection cause ${err}`));

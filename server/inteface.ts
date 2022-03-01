@@ -1,7 +1,10 @@
 export interface BoardFree{
-    description: string;
-    title: string;
-    user_id: string;
+    like?:[string]
+    like_count:number;
+    _id?:string;
+    description?: string;
+    title?: string
+    user_id?: string;
  
 }
 
@@ -20,10 +23,10 @@ export interface Image {
 }
 
 export interface Userdata {
-
-    email?:String,
-    nickname?:String,
-    user_id?:String,
-    iat?:number,
+    _id?:string;
+    email?:string
+    nickname?:string
+    user_id?:string
+    iat?:number
     exp?:number
 }
