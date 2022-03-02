@@ -9,15 +9,9 @@ router.post("/fbcontents", controller.fbcontentsControl);
 router.get("/fblist", controller.fblistControl);
 router.get("/fbtoplist", controller.fbTopListControl);
 router.post("/fblike", controller.fblikeControl);
-// router.post("/fbinfo", controller.fbinfoControl);
-// router.patch("/fbedit", controller.fbeditControl);
-// router.delete("/fbdelete", controller.fbdeleteControl);
-// router.post("/cbregister", upload.array("image"), controller.cbregisterControl);
-// router.post(
-//   "/cbimageEdit",
-//   upload.array("image"),
-//   controller.cbimageEditControl,
-// );
+// router.post("/fbinfo", controller.fbdinfoControl);
+router.patch("/fbedit", controller.fbeditControl);
+router.delete("/fbdelete", controller.fbdeleteControl);
 // router.get("/cblist", controller.cblistControl);
 // router.post("/cbinfo", controller.cbinfoControl);
 // router.patch("/cbedit", controller.cbeditControl);

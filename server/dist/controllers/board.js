@@ -144,19 +144,68 @@ module.exports = {
             }
             //좋아요를 누르면 특정한 board에 특정한 id가 들어간다. 업데이트 된다.. 여러명이 누르는경우?
             // 내가 선택한 freeboard에 내 아이디가 추가되어야한다.
-            console.log(userData.user_id);
-            const fb = yield Freeboard.findOneAndUpdate({ _id: _id }, { $push: { like: "621a4e528d80782fc95319d5" } }, { upsert: true }).exec();
-            // fb.like.push([userData.user_id])
-            //   const fbCheckLike = await Freeboard.updateOne({_id:_id
-            //   },{$push:{like:userData.user_id}})
-            //   .populate('like')
-            return res.status(200).send(fb);
+            // console.log(!dislikefb);
+            //문제점 이전에 사용했던 결과 값이 적용이 되어서 그 해당값이 표시됨
+            const likeUser = yield Freeboard.findOne({
+                _id: _id,
+                like: userData.user_id,
+            });
+            console.log(likeUser, "likeUser");
+            const dislikefb = yield Freeboard.updateOne({ like: userData.user_id }, { $pull: { like: userData.user_id }, $inc: { like_count: -1 } });
+            // const s = await Freeboard.
+            if (likeUser === null) {
+                const likefb = yield Freeboard.updateOne({ _id: _id }, { $push: { like: userData.user_id }, $inc: { like_count: 1 } }, { upsert: true });
+                if (!likefb) {
+                    return res.status(400).send("좋아요 추가가 안된다.");
+                }
+                console.log(likefb);
+                return res.status(201).send({ message: "likefb", data: likefb });
+            }
+            // return res.status(400).send(dislikefb);
+            // console.log('err')
+            console.log(dislikefb);
+            return res.status(200).send(dislikefb);
+            //like의 들어가있는경우 한번더 누르면 좋아요 삭제, like_count 감소
         }
         catch (err) {
             console.log(err);
             return res.status(500).send("서버 에서 문제가발생");
         }
-        // 토큰이 있는 유저라면 좋아요한 게시글인지 아닌지도 보내주기
-        //좋아요 클릭
     }),
+    fbinfoControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        //프리보드를 클릭하면 내용과 좋아요를 보여줘야한다.
+        // 만약 내꺼일경우 내용뿐만아니라 다른것도 보여줘야한다.
+        //댓글이 있다면 댓글도 보여줘야한다,
+        try {
+            const userData = isAuthorized(req, res);
+            if (!userData) {
+                return res.status(401).send("회원가입 필요");
+            }
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(500).send("서버 에서 문제가 발생");
+        }
+    }),
+    fbeditControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        //포스트와 유사
+        const { _id, title, description } = req.body;
+        try {
+            const userData = isAuthorized(req, res);
+            if (!userData) {
+                return res.status(401).send("회원가입 필요");
+            }
+            //있는 프리보드와, 내것만 수정가능
+            const editContent = yield Freeboard.findOneAndUpdate({ _id: _id, user_id: userData.user_id }, { title: title, description: description });
+            if (!editContent) {
+                return res.status(400).send('수정되지 않았습니다.');
+            }
+            return res.status(200).send(editContent);
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(500).send("서버 에서 문제가 발생");
+        }
+    }),
+    fbdeleteControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () { }),
 };

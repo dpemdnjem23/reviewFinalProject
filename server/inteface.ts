@@ -27,6 +27,7 @@ export interface Userdata {
     email?:string
     nickname?:string
     user_id?:string
+    is_like?:boolean
     iat?:number
     exp?:number
 }

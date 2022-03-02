@@ -27,6 +27,7 @@ isopen: {
 
 
 
+
 },{timestamps:true})
 
 module.exports = mongoose.model("Freeboard", freeboardSchema);
