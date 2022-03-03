@@ -207,5 +207,24 @@ module.exports = {
             return res.status(500).send("서버 에서 문제가 발생");
         }
     }),
-    fbdeleteControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () { }),
+    fbdeleteControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        //fb 삭제 => 할때는 코멘트도 같이 삭제되어야한다.
+        // 내 프리보드만 삭제 가능하다.
+        try {
+            const { _id } = req.body;
+            const userData = isAuthorized(req, res);
+            if (!userData) {
+                return res.status(401).send("회원가입 필요");
+            }
+            const deletefb = yield Freeboard.deleteOne({ user_id: userData.user_id, _id: _id });
+            if (!deletefb) {
+                return res.status(400).send('삭제할 수 없습니다.');
+            }
+            return res.status(200).send('삭제');
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(500).send("서버 에서 문제가 발생");
+        }
+    }),
 };

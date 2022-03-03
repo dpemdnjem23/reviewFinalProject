@@ -1,13 +1,17 @@
-// const router = require("express").Router();
-// const controller = require("../controllers/comment");
+
+export {};
+
+
+const router = require("express").Router();
+const controller = require("../controllers/comment");
 
 
 // //freeboardview
 
-// // freeboard commnent
-// router.post("/fbcommentregister", controller.fbcommentregisterControl);
-// router.patch("/fbcommentedit", controller.fbcommenteditControl);
-// router.delete("/fbcommentdelete", controller.fbcommentdeleteControl);
+// freeboard commnent
+router.post("/fbcomment", controller.fbcommentControl);
+router.patch("/fbcommentedit", controller.fbcommenteditControl);
+router.delete("/fbcommentdelete", controller.fbcommentdeleteControl);
 // // freeboard child commnent
 // router.post("/fbchildregister", controller.fbchildregisterControl);
 // router.patch("/fbchildedit", controller.fbchildeditControl);
@@ -22,4 +26,4 @@
 // router.patch("/cbchildedit", controller.cbchildeditControl);
 // router.delete("/cbchilddelete", controller.cbchilddeleteControl);
 
-// module.exports = router;
+module.exports = router;

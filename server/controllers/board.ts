@@ -1,6 +1,5 @@
 export {};
 
-import { String, UserData } from "aws-sdk/clients/ec2";
 import express from "express";
 
 import { BoardFree, Userdata } from "../inteface";
@@ -215,7 +214,7 @@ module.exports = {
     // 만약 내꺼일경우 내용뿐만아니라 다른것도 보여줘야한다.
     //댓글이 있다면 댓글도 보여줘야한다,
     try {
-      const userData = isAuthorized(req, res);
+      const userData:string = isAuthorized(req, res);
 
       if (!userData) {
         return res.status(401).send("회원가입 필요");
@@ -266,13 +265,13 @@ module.exports = {
         return res.status(401).send("회원가입 필요");
       }
 
-      const deletefb = await Freeboard.deleteOne({user_id:userData.user_id,_id:_id})
+      const deletefb:BoardFree = await Freeboard.deleteOne({user_id:userData.user_id,_id:_id})
 
       if(!deletefb){
         return res.status(400).send('삭제할 수 없습니다.')
       }
 
-      return res.status(200).send('삭제완료')
+      return res.status(200).send('삭제')
   
     
 
