@@ -46,6 +46,14 @@ module.exports = {
     }),
     fbcommenteditControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            const { freeboard_id, comment, } = req.body;
+            const userData = isAuthorized(req, res);
+            if (!userData) {
+                return res.status(401).send("회원가입 필요");
+            }
+            const fb = yield Freeboard.findById(freeboard_id);
+            const freeCommentEdit = yield Comment.findOneAndUpdate({ user_id: userData.user_id, freeboard_id: fb._id }, { comment: comment });
+            return res.status(200).send(freeCommentEdit);
         }
         catch (err) {
             console.log(err);
@@ -54,6 +62,15 @@ module.exports = {
     }),
     fbcommentdeleteControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            const { freeboard_id, comment, comment_id } = req.body;
+            const userData = isAuthorized(req, res);
+            if (!userData) {
+                return res.status(401).send("회원가입 필요");
+            }
+            const fb = yield Freeboard.findById(freeboard_id);
+            // child commnet를 남기는 경우, 지우면 댓글만 삭제됨
+            const freeCommentDelete = yield Comment.deleteOne({ user_id: userData.user_id, freeboard_id: fb._id, _id: comment_id });
+            return res.status(200).send(freeCommentDelete);
         }
         catch (err) {
             console.log(err);
