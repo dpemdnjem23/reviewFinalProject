@@ -6,6 +6,7 @@ import { BoardFree, Userdata } from "../inteface";
 require("dotenv").config();
 const Freeboard = require("../models/Freeboard");
 const Crewboard = require("../models/Crewboard");
+const Comment = require("../models/Freecomment")
 
 const { isAuthorized } = require("../middlewares/token");
 
@@ -211,14 +212,33 @@ module.exports = {
 
   fbinfoControl: async (req: express.Request, res: express.Response) => {
     //프리보드를 클릭하면 내용과 좋아요를 보여줘야한다.
-    // 만약 내꺼일경우 내용뿐만아니라 다른것도 보여줘야한다.
-    //댓글이 있다면 댓글도 보여줘야한다,
+    //만약 내꺼일경우 내용뿐만아니라 다른것도 보여줘야한다.
+    
     try {
-      const userData:string = isAuthorized(req, res);
+      const{freeboard_id }:{freeboard_id:string} =req.body
+ 
+      const userData:{user_id:string} = isAuthorized(req, res);
 
       if (!userData) {
         return res.status(401).send("회원가입 필요");
       }
+     const fb =  await Freeboard.findById(freeboard_id)
+
+    console.log(fb)
+ //같은
+     const commentinfo = await Comment.find({freeboard_id:fb._id})
+     console.log(commentinfo)
+     if(!fb){
+       return res.status(400).send('존재하지 않는 게시물')
+     }
+     if(!commentinfo){
+      return res.status(400).send('댓글 존재하지 않습니다.')
+     }
+
+
+
+     return res.status(200).send({fb:fb,co:commentinfo})
+
     } catch (err) {
       console.log(err);
       return res.status(500).send("서버 에서 문제가 발생");
@@ -258,18 +278,38 @@ module.exports = {
 // 내 프리보드만 삭제 가능하다.
     try {
     
-      const{ _id }:BoardFree = req.body
+      const{ freeboard_id }:{freeboard_id:string} = req.body
       const userData: {user_id:string} = isAuthorized(req, res);
 
       if (!userData) {
         return res.status(401).send("회원가입 필요");
-      }
 
-      const deletefb:BoardFree = await Freeboard.deleteOne({user_id:userData.user_id,_id:_id})
+       
+      }
+// 만약에 게시글이 삭제된경우 에도 comment 는 삭제되어야한다.
+
+     const fb:BoardFree = await Freeboard.findOne({_id:freeboard_id})
+
+      const deletefb:BoardFree = await Freeboard.deleteOne({user_id:userData.user_id,_id:freeboard_id})
+
+
+      
 
       if(!deletefb){
         return res.status(400).send('삭제할 수 없습니다.')
       }
+
+
+
+      const deletecomment:{user_id:string,_id:string,freeboard_id:string} = await Comment.deleteOne({user_id:userData.user_id,_id:freeboard_id,freeboard_id:fb._id})
+        
+        if(!deletecomment){
+          return res.status(400).send('삭제할 수 없습니다.')
+    
+        }
+    
+      
+     
 
       return res.status(200).send('삭제')
   

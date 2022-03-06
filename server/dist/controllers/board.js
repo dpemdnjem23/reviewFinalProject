@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
 const Freeboard = require("../models/Freeboard");
 const Crewboard = require("../models/Crewboard");
+const Comment = require("../models/Freecomment");
 const { isAuthorized } = require("../middlewares/token");
 module.exports = {
     //freboard
@@ -174,13 +175,25 @@ module.exports = {
     }),
     fbinfoControl: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //프리보드를 클릭하면 내용과 좋아요를 보여줘야한다.
-        // 만약 내꺼일경우 내용뿐만아니라 다른것도 보여줘야한다.
-        //댓글이 있다면 댓글도 보여줘야한다,
+        //만약 내꺼일경우 내용뿐만아니라 다른것도 보여줘야한다.
         try {
+            const { freeboard_id } = req.body;
             const userData = isAuthorized(req, res);
             if (!userData) {
                 return res.status(401).send("회원가입 필요");
             }
+            const fb = yield Freeboard.findById(freeboard_id);
+            console.log(fb);
+            //같은
+            const commentinfo = yield Comment.find({ freeboard_id: fb._id });
+            console.log(commentinfo);
+            if (!fb) {
+                return res.status(400).send('존재하지 않는 게시물');
+            }
+            if (!commentinfo) {
+                return res.status(400).send('댓글 존재하지 않습니다.');
+            }
+            return res.status(200).send({ fb: fb, co: commentinfo });
         }
         catch (err) {
             console.log(err);
@@ -211,13 +224,19 @@ module.exports = {
         //fb 삭제 => 할때는 코멘트도 같이 삭제되어야한다.
         // 내 프리보드만 삭제 가능하다.
         try {
-            const { _id } = req.body;
+            const { freeboard_id } = req.body;
             const userData = isAuthorized(req, res);
             if (!userData) {
                 return res.status(401).send("회원가입 필요");
             }
-            const deletefb = yield Freeboard.deleteOne({ user_id: userData.user_id, _id: _id });
+            // 만약에 게시글이 삭제된경우 에도 comment 는 삭제되어야한다.
+            const fb = yield Freeboard.findOne({ _id: freeboard_id });
+            const deletefb = yield Freeboard.deleteOne({ user_id: userData.user_id, _id: freeboard_id });
             if (!deletefb) {
+                return res.status(400).send('삭제할 수 없습니다.');
+            }
+            const deletecomment = yield Comment.deleteOne({ user_id: userData.user_id, _id: freeboard_id, freeboard_id: fb._id });
+            if (!deletecomment) {
                 return res.status(400).send('삭제할 수 없습니다.');
             }
             return res.status(200).send('삭제');
