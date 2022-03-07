@@ -94,18 +94,15 @@ module.exports = {
                 return res.status(401).send("회원가입 필요");
             }
             const fb = yield Freeboard.findById(freeboard_id);
-            console.log(fb);
+            console.log(fb, 'fb');
             //댓글에 필요한것 작성 날짜, 유저이름, 댓글 내용
-            if (!fb) {
-                return res.status(400).send("게시판 들어가서 댓글써야함");
-            }
+            //대댓글을 눌러 댓글을 단다.
+            //child => comment
+            const fbchild = yield Child_comment.create({ user_id: userData.user_id });
+            //freechild를 푸쉬하게시
+            const fbcomment = yield Comment.findOneAndUpdate({});
             //save는 수정도 가능함
-            const freeComment = yield Comment.create({
-                user_id: userData.user_id,
-                freeboard_id: freeboard_id,
-                comment: comment,
-            });
-            return res.status(201).send(freeComment);
+            return res.status(201).send('생성됨');
         }
         catch (err) {
             console.log(err);

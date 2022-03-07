@@ -138,24 +138,21 @@ module.exports = {
       if (!userData) {
         return res.status(401).send("회원가입 필요");
       }
-      const fb: { _id: string } = await Freeboard.findById(freeboard_id);
-      console.log(fb);
+      
+      const fb:string= await Freeboard.findById(freeboard_id)
+      console.log(fb,'fb')
       //댓글에 필요한것 작성 날짜, 유저이름, 댓글 내용
-      if (!fb) {
-        return res.status(400).send("게시판 들어가서 댓글써야함");
-      }
-      //save는 수정도 가능함
-      const freeComment: {
-        user_id: string;
-        freeboard_id: string;
-        commnet: string;
-      } = await Comment.create({
-        user_id: userData.user_id,
-        freeboard_id: freeboard_id,
-        comment: comment,
-      });
+      //대댓글을 눌러 댓글을 단다.
+      //child => comment
+     const fbchild:{user_id:string,freeboard_id:string,freecomment_id:string} = await Child_comment.create({user_id:userData.user_id})
+      //freechild를 푸쉬하게시
 
-      return res.status(201).send(freeComment);
+
+      const fbcomment =await Comment.findOneAndUpdate({})
+    
+      //save는 수정도 가능함
+   
+      return res.status(201).send('생성됨');
     } catch (err) {
       console.log(err);
       return res.status(500).send(err);
