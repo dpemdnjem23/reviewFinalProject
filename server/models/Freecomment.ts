@@ -13,6 +13,7 @@ const freecommentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Freeboard",
     },
+    
     comment: {
       type: String,
       maxLength: 1000,
@@ -21,7 +22,11 @@ const freecommentSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    freechildcomments: [freechildcommentSchema]
+    freechildcomments: {
+      type:[freechildcommentSchema],
+      default:[]
+    
+    }
   },
   { timestamps: true }
 );

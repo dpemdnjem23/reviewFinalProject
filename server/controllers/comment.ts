@@ -125,12 +125,15 @@ module.exports = {
     try {
       //회원만 댓글을 달수 있다. childcomment 를 달 수 있다. 대댓글은 댓글에 [] 형태로 들어간다.
       // chid는 프리보드, id childid , child commnet depth 로 구성
+      //parent_comment 부모 코멘트 => child든 comment든 해당되는 id를 넣는다.
 
       const {
+        parent_id,
         freeboard_id,
         childcomment,
         freecomment_id,
       }: {
+        parent_id:string;
         freeboard_id: string;
         childcomment: string;
         freecomment_id: string;
@@ -141,47 +144,40 @@ module.exports = {
       if (!userData) {
         return res.status(401).send("회원가입 필요");
       }
+      
+      const commentinchild: {
+        freeboard_id: string;
+        user_id: string;
+        freecommnet_id: string;
+        child_comment: string;
+      } =
+        await Comment.findOneAndUpdate(
+          {
+            _id: freecomment_id,
+            freeboard_id: freeboard_id,
+          },
+          {
+            $push: {
+              freechildcomments: [
+                {
+                  
+                  child_comment: childcomment,
+                  user_id: userData.user_id,
+                  parent_id: parent_id, //역할이 결국 parent역할 parent가 a라고하면 
+         
+                  
+                },
+                
+              ]
+            }
+          },{upsert:true}
+        )
 
-    
+       //대댓글 밑에 대댓글 달기 => depth =1
 
-      //댓글에 필요한것 작성 날짜, 유저이름, 댓글 내용
-      //대댓글을 눌러 댓글을 단다.
-      //child => comment
-      // const fbchild: {
-      //   _id:string
-      //   user_id: string;
-      //   freeboard_id: string;
-      //   freecomment_id: string;
-      // } = await Child_comment.create({
-      //   user_id: userData.user_id,
-      //   freeboard_id: fb._id,
-      //   freecomment_id: freecomment_id,
-      //   childcomment: childcomment,
-      // });
-      // console.log(fbchild._id)
-
-      //프리보드에 들어와서 => 댓글창 => 대댓글을클릭 => 대댓글을 입력하고, 완료
-      //대댓글이 생기려면, 있는 유저여야한다.
-      //대댓글 만들고 depth 추
-      // const fb: { _id: string } = await Freeboard.findOne({
-      //   freeboard_id: freeboard_id,
-      // });
-      // console.log(fb._id, "fb");
-// 
-
-// console.log(Child_comment)
-
-      const commentinchild: { freeboard_id: string; user_id: string ,freecommnet:string,child_comment:string} =
-        //대댓글을만든다 만약에 a댓글에 대댓을 달면 depth+1 depth=1인 상황 depth=1인 곳에 댓글을 달면 depth=2
-        //따라서 +1을 무조건하는게 아니라 원래가지고 있는 depth에 +1을 해서 생성한다.
-        await Child_comment.create({
-          freeboard_id: freeboard_id,
-          user_id: userData.user_id,
-          freecomment_id: freecomment_id,
-          child_comment: childcomment,
-        });
+        
       //대댓글 생성 ,
-    
+      console.log(commentinchild);
       // const commentinchilecomment: { freecomment_id: string } =
       //   await Comment.findOneAndUpdate({ freecomment_id: freecomment_id },{$push:{freechildcomments:commentchild}});
 

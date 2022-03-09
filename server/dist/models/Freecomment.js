@@ -20,11 +20,9 @@ const freecommentSchema = new Schema({
         type: Boolean,
         default: false,
     },
-    freechildcomments: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Freechildcomment",
-        },
-    ],
+    freechildcomments: {
+        type: [freechildcommentSchema],
+        default: []
+    }
 }, { timestamps: true });
 module.exports = mongoose.model("Freecomment", freecommentSchema);

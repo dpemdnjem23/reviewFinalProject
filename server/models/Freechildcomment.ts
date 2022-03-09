@@ -2,7 +2,7 @@
 export{}
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+//대댓글의 대댓글 만들려고해 childschema가 
 const freechildcommentSchema = new Schema(
   {
     user_id: {
@@ -10,27 +10,19 @@ const freechildcommentSchema = new Schema(
       ref: "User",
       required: true,
     },
-    freeboard_id: {
+  
+    parent_id: {
       type: Schema.Types.ObjectId,
-      ref: "Freeboard",
-      required: true,
-    },
-    freecomment_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Freecomment",
+      ref: "Freechildcomment",
     },
     child_comment: {
       type: String,
       maxLength:300 ,
     },
-    depth:{
-        type:Number
-    },
-    parent:{
-        type:Boolean,
-        default:true
+    
+    isDeleted:Boolean,
+ 
 
-    }
   },
   { timestamps: true }
 );
