@@ -1,4 +1,3 @@
-import { model } from "mongoose";
 
 export{}
 const mongoose = require("mongoose");
@@ -28,7 +27,8 @@ const freechildcommentSchema = new Schema(
         type:Number
     },
     parent:{
-        type:Boolean
+        type:Boolean,
+        default:true
 
     }
   },

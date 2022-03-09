@@ -25,7 +25,8 @@ const freechildcommentSchema = new Schema({
         type: Number
     },
     parent: {
-        type: Boolean
+        type: Boolean,
+        default: true
     }
 }, { timestamps: true });
 // freecommentSchema.plugin(findOrCreate);

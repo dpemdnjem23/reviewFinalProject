@@ -22,8 +22,8 @@ const freecommentSchema = new Schema({
     },
     freechildcomments: [
         {
-            type: freechildcommentSchema,
-            default: [],
+            type: Schema.Types.ObjectId,
+            ref: "Freechildcomment",
         },
     ],
 }, { timestamps: true });

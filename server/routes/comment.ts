@@ -13,7 +13,7 @@ router.post("/fbcomment", controller.fbcommentControl);
 router.patch("/fbcommentedit", controller.fbcommenteditControl);
 router.delete("/fbcommentdelete", controller.fbcommentdeleteControl);
 // // freeboard child commnent
-// router.post("/fbchildrcomment", controller.fbchildcommentControl);
+router.post("/fbchildcomment", controller.fbchildcommentControl);
 // router.patch("/fbchildcommentedit", controller.fbchildeditControl);
 // router.delete("/fbchildcommentdelete", controller.fbchilddeleteControl);
 
