@@ -233,36 +233,27 @@ module.exports = {
   },
   fbchilddeleteControl: async (req: express.Request, res: express.Response) => {
     try {
-      //회원만 댓글을 달수 있다.
-      //
+      //comment 삭제시 대댓글이 다지워지므로, child나 comment가 있을시 댓글은 삭제되지 않는다. isdeleted true로 댓글을 숨겨줌
+
+            //
       const {
+        parent_id,
+        childcomment_id,
         freeboard_id,
         comment,
-      }: { freeboard_id: string; comment: string } = req.body;
+      }: { freeboard_id: string; comment: string, childcomment_id:string, parent_id:string } = req.body;
 
       const userData: { user_id: string } = isAuthorized(req, res);
 
       if (!userData) {
         return res.status(401).send("회원가입 필요");
       }
-      const fb: { _id: string } = await Freeboard.findById(freeboard_id);
-      console.log(fb);
-      //댓글에 필요한것 작성 날짜, 유저이름, 댓글 내용
-      if (!fb) {
-        return res.status(400).send("게시판 들어가서 댓글써야함");
-      }
+      const deletechild = await Child_comment.findByIdAndUpdate({parent_id,childcomment_id},{isDeleted:true})
+     
       //save는 수정도 가능함
-      const freeComment: {
-        user_id: string;
-        freeboard_id: string;
-        commnet: string;
-      } = await Comment.create({
-        user_id: userData.user_id,
-        freeboard_id: freeboard_id,
-        comment: comment,
-      });
+     
 
-      return res.status(201).send(freeComment);
+      return res.status(201).send(deletechild);
     } catch (err) {
       console.log(err);
       return res.status(500).send(err);
